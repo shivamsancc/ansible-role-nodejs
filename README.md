@@ -11,10 +11,9 @@ nodeVersion: 8.10.0
 ```
 The nodejs version to install.
 
-```
-
 ## Example playbook
 ```
+---
 - hosts: all
   become: yes
   roles:
