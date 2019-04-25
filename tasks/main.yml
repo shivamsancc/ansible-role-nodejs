@@ -4,14 +4,14 @@
 
   - name: Install build tools
     apt: 
-      name: ['gcc', 'g++', 'make', 'build-essential', 'git', 'autoconf', 'curl', 'libtool', 'libssl-dev', 'libcurl4-openssl-dev', 'libz-dev']
+      name:   ['gcc', 'g++', 'make', 'build-essential', 'git', 'autoconf', 'curl', 'libtool', 'libssl-dev', 'libcurl4-openssl-dev', 'libz-dev']
       state: latest
 
   - name: download nodejs
     get_url: url=http://nodejs.org/dist/{{ nodeVersion }}/node-{{ nodeVersion }}.tar.gz dest=/usr/local/src
 
   - name: build and install nodejs
-    shell: cd /usr/local/src && tar xvf node-{{ nodeVersion }}.tar.gz && cd node-{{ nodeVersion }} && ./configure && make -j 6 && make install
+    shell: cd /usr/local/src && tar xvf node-{{ nodeVersion }}.tar.gz && cd node-{{ nodeVersion }} && ./configure && make -j 4 && make install
 
   - name: install bower grunt and forever
     shell: npm install -g bower grunt grunt-cli forever
