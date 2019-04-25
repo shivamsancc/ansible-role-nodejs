@@ -7,7 +7,7 @@ This is an ansible role for building nodejs.
 Available variables are listed below, along with default values (see defaults/main.yml):
 
 ```
-nodeVersion: 8.10.0
+nodeVersion: 10.15.3
 ```
 The nodejs version to install.
 
