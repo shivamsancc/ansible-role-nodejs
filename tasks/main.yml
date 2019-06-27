@@ -15,3 +15,9 @@
 
   - name: install bower grunt and forever
     shell: npm install -g bower grunt grunt-cli forever
+
+  - name: remove source code
+    file: 
+      path: /usr/local/src/node-{{ nodeVersion }}*
+      state: absent
+    when: remove_source|bool
