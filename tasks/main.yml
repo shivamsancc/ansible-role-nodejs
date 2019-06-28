@@ -18,7 +18,7 @@
 
   - name: remove source code
     file: 
-      path: {{ item }}
+      path: "{{ item }}"
       state: absent
     loop:
       - /usr/local/src/node-{{ nodeVersion }}.tar.gz
