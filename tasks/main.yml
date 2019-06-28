@@ -18,6 +18,9 @@
 
   - name: remove source code
     file: 
-      path: /usr/local/src/node-{{ nodeVersion }}*
+      path: {{ item }}
       state: absent
+    loop:
+      - /usr/local/src/node-{{ nodeVersion }}.tar.gz
+      - /usr/local/src/node-{{ nodeVersion }}
     when: remove_source|bool
