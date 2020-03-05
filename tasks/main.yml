@@ -2,25 +2,18 @@
   - name: Update apt-cache
     apt: update_cache=yes 
 
-  - name: Install build tools
+  - name: Install curl
     apt: 
-      name:   ['gcc', 'g++', 'make', 'build-essential', 'git', 'autoconf', 'curl', 'libtool', 'libssl-dev', 'libcurl4-openssl-dev', 'libz-dev']
+      name:   ['curl']
       state: latest
 
-  - name: download nodejs
-    get_url: url=http://nodejs.org/dist/{{ nodeVersion }}/node-{{ nodeVersion }}.tar.gz dest=/usr/local/src
+  - name: set apt sources
+    shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo bash - 
 
-  - name: build and install nodejs
-    shell: cd /usr/local/src && tar xvf node-{{ nodeVersion }}.tar.gz && cd node-{{ nodeVersion }} && ./configure && make -j 4 && make install
+  - name: Install nodejs
+    apt: 
+      name:   ['nodejs']
+      state: latest
 
-  - name: install bower grunt and forever
-    shell: npm install -g bower grunt grunt-cli forever
-
-  - name: remove source code
-    file: 
-      path: "{{ item }}"
-      state: absent
-    loop:
-      - /usr/local/src/node-{{ nodeVersion }}.tar.gz
-      - /usr/local/src/node-{{ nodeVersion }}
-    when: remove_source|bool
+  - name: install useful node-related tools
+    shell: npm install -g bower pm2 pm2-logrotate pino-pretty forever
