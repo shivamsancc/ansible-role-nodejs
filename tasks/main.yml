@@ -16,4 +16,4 @@
       state: latest
 
   - name: install useful node-related tools
-    shell: npm install -g bower pm2 pm2-logrotate pino-pretty forever
+    shell: npm install -g bower pm2 pm2-logrotate pino-pretty forever pm2-metrics
