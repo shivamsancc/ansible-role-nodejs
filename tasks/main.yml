@@ -9,7 +9,7 @@
     state: present
 
 - name: Set apt sources for Node.js
-  command: curl -sL https://deb.nodesource.com/setup_19.x | bash -
+  shell: curl -sL https://deb.nodesource.com/setup_19.x | bash
   args:
     warn: false
   changed_when: false
