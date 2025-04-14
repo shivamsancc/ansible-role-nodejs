@@ -1,55 +1,50 @@
 ---
-- name: Setup Node.js 20 environment
-  hosts: all
-  become: yes
-  tasks:
+- name: Update apt-cache
+  apt:
+    update_cache: yes
 
-    - name: Update apt-cache
-      apt:
-        update_cache: yes
+- name: Install curl
+  apt:
+    name: curl
+    state: present
 
-    - name: Install curl
-      apt:
-        name: curl
-        state: present
+- name: Add Node.js 20 apt source
+  shell: curl -sL https://deb.nodesource.com/setup_20.x | bash -
+  args:
+    warn: false
+  changed_when: false
 
-    - name: Add Node.js 20 apt source
-      shell: curl -sL https://deb.nodesource.com/setup_20.x | bash -
-      args:
-        warn: false
-      changed_when: false
+- name: Install Node.js
+  apt:
+    name: nodejs
+    state: latest
 
-    - name: Install Node.js
-      apt:
-        name: nodejs
-        state: latest
+- name: Install useful node-related tools globally
+  npm:
+    name: "{{ item }}"
+    global: yes
+  loop:
+    - bower
+    - pm2
+    - pm2-logrotate
+    - pino-pretty
+    - forever
+    - pm2-metrics
 
-    - name: Install useful node-related tools globally
-      npm:
-        name: "{{ item }}"
-        global: yes
-      loop:
-        - bower
-        - pm2
-        - pm2-logrotate
-        - pino-pretty
-        - forever
-        - pm2-metrics
+- name: Ensure PM2 is installed
+  command: pm2 --version
+  register: pm2_installed
+  ignore_errors: yes
+  changed_when: false
 
-    - name: Ensure PM2 is installed
-      command: pm2 --version
-      register: pm2_installed
-      ignore_errors: yes
-      changed_when: false
+- name: Install PM2 logrotate module
+  command: pm2 install pm2-logrotate
+  when: pm2_installed.rc == 0
+  args:
+    creates: /root/.pm2/modules/pm2-logrotate
 
-    - name: Install PM2 logrotate module
-      command: pm2 install pm2-logrotate
-      when: pm2_installed.rc == 0
-      args:
-        creates: /root/.pm2/modules/pm2-logrotate
-
-    - name: Install PM2 metrics module
-      command: pm2 install pm2-metrics
-      when: pm2_installed.rc == 0
-      args:
-        creates: /root/.pm2/modules/pm2-metrics
+- name: Install PM2 metrics module
+  command: pm2 install pm2-metrics
+  when: pm2_installed.rc == 0
+  args:
+    creates: /root/.pm2/modules/pm2-metrics
